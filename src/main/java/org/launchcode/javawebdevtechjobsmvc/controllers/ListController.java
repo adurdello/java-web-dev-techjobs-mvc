@@ -14,13 +14,17 @@ import java.util.HashMap;
 /**
  * Created by LaunchCode
  */
+
+
 @Controller
 @RequestMapping(value = "list")
 public class ListController {
 
+    //these HashMaps provide a centralized collection of the different List and Search options
     static HashMap<String, String> columnChoices = new HashMap<>();
     static HashMap<String, Object> tableChoices = new HashMap<>();
 
+//constructor that populates columnChoices and tableChoices with values
     public ListController () {
         columnChoices.put("all", "All");
         columnChoices.put("employer", "Employer");
@@ -32,8 +36,10 @@ public class ListController {
         tableChoices.put("location", JobData.getAllLocations());
         tableChoices.put("positionType", JobData.getAllPositionTypes());
         tableChoices.put("coreCompetency", JobData.getAllCoreCompetency());
+
     }
 
+    //handler method that renders a view with table of clickable links for job categories
     @RequestMapping(value = "")
     public String list(Model model) {
         model.addAttribute("columns", columnChoices);
@@ -46,6 +52,7 @@ public class ListController {
         return "list";
     }
 
+    //handler method that renders a view that displays info on jobs related to a category
     @RequestMapping(value = "jobs")
     public String listJobsByColumnAndValue(Model model, @RequestParam String column, @RequestParam String value) {
         ArrayList<Job> jobs;
@@ -57,7 +64,7 @@ public class ListController {
             model.addAttribute("title", "Jobs with " + columnChoices.get(column) + ": " + value);
         }
         model.addAttribute("jobs", jobs);
-
+        model.addAttribute("columns", columnChoices);
         return "list-jobs";
     }
 }
